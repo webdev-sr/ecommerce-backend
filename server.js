@@ -3,19 +3,21 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const { Pool } = require('pg');
 const path = require('path');
+require('dotenv').config();
+
 
 const app = express();
 const PORT = 3000;
 
-// PostgreSQL connection config
 const pool = new Pool({
-  user: 'postgres',
-  host: 'your-project.supabase.co',
-  database: 'saree_world1',
-  password: 'Root@2006',
-  port: 5432,
+  user: process.env.PGUSER,
+  host: process.env.PGHOST,
+  database: process.env.PGDATABASE,
+  password: process.env.PGPASSWORD,
+  port: process.env.PGPORT,
   ssl: { rejectUnauthorized: false }
 });
+
 
 
 // Middleware
