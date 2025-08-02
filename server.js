@@ -26,11 +26,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Serve static frontend pages
-app.use('/pages', express.static(path.join(__dirname, '../frontend/pages')));
+app.use('/pages', express.static(path.join(__dirname, '../frontend')));
 
 // Default route
 app.get('/', (req, res) => {
-  res.redirect('/pages/login.html');
+  res.redirect('/login.html');
 });
 
 // POST: Register
@@ -53,7 +53,7 @@ app.post('/register', async (req, res) => {
       [name, email, hashedPassword]
     );
 
-    res.send('Registration successful. <a href="/pages/login.html">Login here</a>');
+    res.send('Registration successful. <a href="/login.html">Login here</a>');
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error during registration.');
@@ -68,14 +68,14 @@ app.post('/login', async (req, res) => {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
 
     if (result.rows.length === 0) {
-      return res.status(400).send('Invalid email or password. <a href="/pages/login.html">Try again</a>');
+      return res.status(400).send('Invalid email or password. <a href="/login.html">Try again</a>');
     }
 
     const user = result.rows[0];
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).send('Invalid email or password. <a href="/pages/login.html">Try again</a>');
+      return res.status(400).send('Invalid email or password. <a href="/login.html">Try again</a>');
     }
 
     res.send(`Welcome, ${user.name}! You have successfully logged in.`);
